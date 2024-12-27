@@ -33,6 +33,6 @@ void st_free(Stack *stack);
 int st_is_empty(Stack *stack);
 void st_peek(Stack *stack, void *output);
 void st_pop(Stack *stack, void *output);
-void st_push(Stack *stack, St_Element item);
+void st_push(Stack *stack, St_Element element);
 
 #endif

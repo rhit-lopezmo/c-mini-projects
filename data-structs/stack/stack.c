@@ -2,7 +2,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <string.h>
 
+/**
+ * Initializes a stack.
+ * @param capacity - max amount of elements the stack can hold
+ * @param type - the type of element the stack holds
+ * @return stack - a pointer to an allocated and initialized stack
+ */
 Stack *st_init(int capacity, St_Type type) {
 	Stack *stack = malloc(sizeof(Stack));
 	stack->type = type;	
@@ -14,29 +21,46 @@ Stack *st_init(int capacity, St_Type type) {
 	return stack;
 }
 
+/**
+ * Frees any memory associated with a stack.
+ * @param stack - a pointer to the stack to free
+ */
 void st_free(Stack *stack) {
 	free(stack->data);
 	free(stack);
 }
 
+
+/**
+ * Checks if a stack is empty.
+ * @param stack - a pointer to the stack to check
+ * @return 0 if it is empty, otherwise 1
+ */
 int st_is_empty(Stack *stack) {
 	return stack->size == 0;
 }
 
+/**
+ * Doubles the capacity of the stack, copying all elements over and freeing
+ * the old stack data.
+ * @param stack - a pointer to the stack that needs doubled
+ */
 void st_double_cap(Stack *stack) {
 	int new_cap = stack->capacity * 2;
-	Stack *new_st = st_init(new_cap, stack->type_size);
-	new_st->size = stack->size;
-	
-	for (int i = 0; i < stack->size; i++) {
-		new_st->data[i] = stack->data[i];
-	}
+	St_Element *new_data = malloc(new_cap * stack->type_size);
 
-	st_free(stack);
+	memcpy(new_data, stack->data, stack->size * stack->type_size);
 
-	stack = new_st;
+	stack->capacity = new_cap;
+	free(stack->data);
+	stack->data = new_data;
 }
 
+/**
+ * Peeks at the top element of a stack.
+ * @param stack - a pointer to the stack to peek
+ * @param output - a pointer to write the peeked element to
+ */
 void st_peek(Stack *stack, void *output) {
 	if (st_is_empty(stack)) {
 		printf("error in st_peek: tried to peek when stack was empty\n");	
@@ -68,6 +92,11 @@ void st_peek(Stack *stack, void *output) {
 	}
 }
 
+/**
+ * Pops the top element off the stack, removing it.
+ * @param stack - a pointer to the stack to pop
+ * @param output - a pointer to write the popped element to
+ */
 void st_pop(Stack *stack, void *output) {
 	if (st_is_empty(stack)) {
 		printf("error in st_pop: tried to pop when stack was empty\n");	
@@ -101,11 +130,16 @@ void st_pop(Stack *stack, void *output) {
 	stack->size--;
 }
 
-void st_push(Stack *stack, St_Element item) {
+/**
+ * Pushes an element onto the stack.
+ * @param stack - a pointer to the stack to push to
+ * @param element - the element to push onto the stack
+ */
+void st_push(Stack *stack, St_Element element) {
 	if (stack->size == stack->capacity) {
 		st_double_cap(stack);
 	}
 
-	stack->data[stack->size] = item;
+	stack->data[stack->size] = element;
 	stack->size++;
 }
