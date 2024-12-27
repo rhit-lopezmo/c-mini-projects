@@ -92,7 +92,7 @@ int main(void) {
 	printf("size after pop #1: %d\n\n", char_st->size);
 
 	// test adding to limit and that cap doubles
-	for (char i = 'a'; i < 'e'; i++) {
+	for (char i = 'a'; i < 'f'; i++) {
 		char item = i;
 		st_push(char_st, (St_Element)item);
 
@@ -105,7 +105,7 @@ int main(void) {
 	st_char_print(char_st);	
 
 	// add 1 more to see if capacity grows correctly
-	char one_more_char = 'e';
+	char one_more_char = 'f';
 	printf("capacity before: %d\n",char_st->capacity);
 	st_push(char_st, (St_Element)one_more_char);
 	printf("current size: %d\n", char_st->size);
@@ -113,7 +113,6 @@ int main(void) {
 	st_char_print(char_st);
 
 	st_free(char_st);
-
 
 	return 0;
 }
